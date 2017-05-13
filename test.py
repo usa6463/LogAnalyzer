@@ -2,13 +2,27 @@ import csv # This script save data to csv file as flat text file\
 import re # For finding string what I need in line
 from geolite2 import geolite2 # For getting country from IP address	/	pip install maxminddb-geolite2
 import os # listdir, mkdir ...
+from xml.etree.ElementTree import parse # parsing xml for filter regex
 
 with open('CTF2.log', 'r') as rfd:
 	csvfile1 = open('SimpleIPList.csv', 'w', newline='')
 	writer1 = csv.writer(csvfile1)
 	csvfile2 = open('DetailIPList.csv', 'w', newline='')
 	writer2 = csv.writer(csvfile2)
-	exceptWriter = open('exception.txt', 'w')
+	exceptWriter = open('exception.txt', 'a')
+	csvfile4 = open('sqli_list.csv', 'w', newline='')
+	writer4 = csv.writer(csvfile4)
+	csvfile5 = open('rfi_list.csv', 'w', newline='')
+	writer5 = csv.writer(csvfile5)
+	csvfile6 = open('webShell_list.csv', 'w', newline='')
+	writer6 = csv.writer(csvfile6)
+
+	tree = parse('sqli_filter.xml')
+	root = tree.getroot()
+	sqli_filter = root.findall('filter')
+	tree = parse('rfi_filter.xml')
+	root = tree.getroot()
+	rfi_filter = root.findall('filter')
 
 	if not 'activity' in os.listdir():
 			os.mkdir('activity')
@@ -24,14 +38,7 @@ with open('CTF2.log', 'r') as rfd:
 		if(not line):
 			break
 
-		#log checking. some lines are not access information
-		p = re.compile('^[0-9]{4,4}[-][0-9]{2,2}[-][0-9]{2,2}')
-		logCheck = p.findall(line)
-		p = re.compile('[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}')
-		ipCheck = p.findall(line)
-		if(len(logCheck)==0 or len(ipCheck)<2):
-			exceptWriter.write('{} '.format(i)+line)
-		else:
+		try:
 			line_list = line.split()
 			# get date, time, serverIP, request, path
 			activity = line_list[0:5]
@@ -62,30 +69,52 @@ with open('CTF2.log', 'r') as rfd:
 			#get browser
 			browser = " ".join(line_list[:redirect_start_index])
 
-			activity = activity + [parameter, request, email, ip, browser, redirect] + line_list[-4:]
-			# acitivity write
-			csvfile3 = open('activity/'+ip+'.csv', 'a', newline='')
-			writer3 = csv.writer(csvfile3)
-			writer3.writerow(activity)
+		except:
+			exceptWriter.write('{} '.format(i)+line+'\n')
 
-			if(not ip in ip_info_dict): #add unique ID
-				country=''
-				if ip_info == None :
-					country = 'NO INFO'
-				elif 'country' in ip_info:
-					country = ip_info['country']['names']['en']
-				elif 'continent':
-					country = ip_info['continent']['names']['en']
-				else:
-					country = 'NO INFO'
-					
-				ip_info_dict[ip] = [country, 1]
-				writer1.writerow([ip])
-			else :
-				ip_info_dict[ip][1] += 1
+		# acitivity write
+		activity = activity + [parameter, request, email, ip, browser, redirect] + line_list[-4:]
+		csvfile3 = open('activity/'+ip+'.csv', 'a', newline='')
+		writer3 = csv.writer(csvfile3)
+		writer3.writerow(activity)
+		csvfile3.close()
 
-			csvfile3.close()
+		#add unique ID
+		if(not ip in ip_info_dict): 
+			country=''
+			if ip_info == None :
+				country = 'NO INFO'
+			elif 'country' in ip_info:
+				country = ip_info['country']['names']['en']
+			elif 'continent' in ip_info:
+				country = ip_info['continent']['names']['en']
+			else:
+				country = 'NO INFO'
+			ip_info_dict[ip] = [country, 1]
+			writer1.writerow([ip])
+		else :
+			ip_info_dict[ip][1] += 1
 
+		# detect sqli
+		for element in sqli_filter :
+			rule = element.findtext("rule")
+			p = re.compile(rule)
+			m = p.match(parameter)
+			if m:
+				description = element.findtext("description")
+				writer4.writerow(activity + [description])
+				break
+
+		# detect remote file inclusion
+		for element in rfi_filter :
+			rule = element.findtext("rule")
+			p = re.compile(rule)
+			m = p.match(parameter)
+			if m:
+				description = element.findtext("description")
+				writer5.writerow(activity + [description])
+				break
+				
 	for ip in ip_info_dict: # list of unique IP addresses with country and number of hits
 		ip_info_dict[ip].insert(0, ip)
 		writer2.writerow(ip_info_dict[ip])
