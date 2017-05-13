@@ -14,9 +14,7 @@ with open('CTF2.log', 'r') as rfd:
 	writer4 = csv.writer(csvfile4)
 	csvfile5 = open('rfi_list.csv', 'w', newline='')
 	writer5 = csv.writer(csvfile5)
-	csvfile6 = open('webShell_list.csv', 'w', newline='')
-	writer6 = csv.writer(csvfile6)
-
+	
 	tree = parse('sqli_filter.xml')
 	root = tree.getroot()
 	sqli_filter = root.findall('filter')
