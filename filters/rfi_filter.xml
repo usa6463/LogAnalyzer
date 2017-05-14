@@ -1,0 +1,256 @@
+<filters>
+    <filter>
+        <id>14</id>
+        <rule><![CDATA[(?:#@~\^\w+)|(?:\wscript:|@import[^\w]|;base64|base64,)|(?:\w\s*\([\w\s]+,[\w\s]+,[\w\s]+,[\w\s]+,[\w\s]+,[\w\s]+\))]]></rule>
+        <description>Detects possible includes, VBSCript/JScript encodeed and packed functions</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+    <filter>
+        <id>15</id>
+        <rule><![CDATA[([^*:\s\w,.\/?+-]\s*)?(?<![a-z]\s)(?<![a-z\/_@\-\|])(\s*return\s*)?(?:create(?:element|attribute|textnode)|[a-z]+events?|setattribute|getelement\w+|appendchild|createrange|createcontextualfragment|removenode|parentnode|decodeuricomponent|\wettimeout|(?:ms)?setimmediate|option|useragent)(?(1)[^\w%"]|(?:\s*[^@\s\w%",.+\-]))]]></rule>
+        <description>Detects JavaScript DOM/miscellaneous properties and methods</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>6</impact>
+    </filter>
+    <filter>
+        <id>16</id>
+        <rule><![CDATA[([^*\s\w,.\/?+-]\s*)?(?<![a-mo-z]\s)(?<![a-z\/_@])(\s*return\s*)?(?:alert|inputbox|showmod(?:al|eless)dialog|showhelp|infinity|isnan|isnull|iterator|msgbox|executeglobal|expression|prompt|confirm|dialog|urn|(?:un)?eval|exec|execscript|tostring|status|execute|window|unescape|navigate|jquery|getscript|extend|prototype)(?(1)[^\w%"]|(?:\s*[^@\s\w%",.:\/+\-]))]]></rule>
+        <description>Detects possible includes and typical script methods</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+    <filter>
+        <id>17</id>
+        <rule><![CDATA[([^*:\s\w,.\/?+-]\s*)?(?<![a-z]\s)(?<![a-z\/_@])(\s*return\s*)?(?:hash|name|href|navigateandfind|close|constructor|port|protocol|assign|replace|back|forward|document|ownerdocument|window|top|this|self|parent|frames|_?content|cookie|innerhtml|innertext|csstext+?|outerhtml|print|moveby|resizeto|createstylesheet|stylesheets)(?(1)[^\w%"]|(?:\s*[^@\/\s\w%.+\-]))]]></rule>
+        <description>Detects JavaScript object properties and methods</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>
+    <filter>
+        <id>18</id>
+        <rule><![CDATA[([^*:\s\w,.\/?+-]\s*)?(?<![a-z]\s)(?<![a-z\/_@\-\|])(\s*return\s*)?(?:join|pop|push|reverse|reduce|concat|map|shift|sp?lice|sort|unshift)(?(1)[^\w%"]|(?:\s*[^@\s\w%,.+\-]))]]></rule>
+        <description>Detects JavaScript array properties and methods</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>
+    <filter>
+        <id>19</id>
+        <rule><![CDATA[([^*:\s\w,.\/?+-]\s*)?(?<![a-z]\s)(?<![a-z\/_@\-\|])(\s*return\s*)?(?:set|atob|btoa|charat|charcodeat|charset|concat|crypto|frames|fromcharcode|indexof|lastindexof|match|navigator|toolbar|menubar|replace|regexp|slice|split|substr|substring|escape|\w+codeuri\w*)(?(1)[^\w%"]|(?:\s*[^@\s\w%,.+\-]))]]></rule>
+        <description>Detects JavaScript string properties and methods</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>
+    <filter>
+        <id>21</id>
+        <rule><![CDATA[(?:,\s*(?:alert|showmodaldialog|eval)\s*,)|(?::\s*eval\s*[^\s])|([^:\s\w,.\/?+-]\s*)?(?<![a-z\/_@])(\s*return\s*)?(?:(?:document\s*\.)?(?:.+\/)?(?:alert|eval|msgbox|showmod(?:al|eless)dialog|showhelp|prompt|confirm|dialog|open))\s*(?:[^.a-z\s\-]|(?:\s*[^\s\w,.@\/+-]))|(?:java[\s\/]*\.[\s\/]*lang)|(?:\w\s*=\s*new\s+\w+)|(?:&\s*\w+\s*\)[^,])|(?:\+[\W\d]*new\s+\w+[\W\d]*\+)|(?:document\.\w)]]></rule>
+        <description>Detects very basic XSS probings</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+    <filter>
+        <id>22</id>
+        <rule><![CDATA[(?:=\s*(?:top|this|window|content|self|frames|_content))|(?:\/\s*[gimx]*\s*[)}])|(?:[^\s]\s*=\s*script)|(?:\.\s*constructor)|(?:default\s+xml\s+namespace\s*=)|(?:\/\s*\+[^+]+\s*\+\s*\/)]]></rule>
+        <description>Detects advanced XSS probings via Script(), RexExp, constructors and XML namespaces</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>	
+    <filter>
+        <id>27</id>
+        <rule><![CDATA[(?:(?:vbs|vbscript|data):.*[,+])|(?:\w+\s*=\W*(?!https?)\w+:)|(jar:\w+:)|(=\s*"?\s*vbs(?:ript)?:)|(language\s*=\s?"?\s*vbs(?:ript)?)|on\w+\s*=\*\w+\-"?]]></rule>
+        <description>Detects data: URL injections, VBS injections and common URI schemes</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+    <filter>
+        <id>28</id>
+        <rule><![CDATA[(?:firefoxurl:\w+\|)|(?:(?:file|res|telnet|nntp|news|mailto|chrome)\s*:\s*[%&#xu\/]+)|(wyciwyg|firefoxurl\s*:\s*\/\s*\/)]]></rule>
+        <description>Detects IE firefoxurl injections, cache poisoning attempts and local file inclusion/execution</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+            <tag>csrf</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+    <filter>
+        <id>29</id>    
+        <rule><![CDATA[(?:binding\s?=|moz-binding|behavior\s?=)|(?:[\s\/]style\s*=\s*[-\\])]]></rule>
+        <description>Detects bindings and behavior injections</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>
+    <filter>
+        <id>30</id>
+        <rule><![CDATA[(?:=\s*\w+\s*\+\s*")|(?:\+=\s*\(\s")|(?:!+\s*[\d.,]+\w?\d*\s*\?)|(?:=\s*\[s*\])|(?:"\s*\+\s*")|(?:[^\s]\[\s*\d+\s*\]\s*[;+])|(?:"\s*[&|]+\s*")|(?:\/\s*\?\s*")|(?:\/\s*\)\s*\[)|(?:\d\?.+:\d)|(?:]\s*\[\W*\w)|(?:[^\s]\s*=\s*\/)]]></rule>
+        <description>Detects common XSS concatenation patterns 1/2</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>
+    <filter>
+        <id>31</id>
+        <rule><![CDATA[(?:=\s*\d*\.\d*\?\d*\.\d*)|(?:[|&]{2,}\s*")|(?:!\d+\.\d*\?")|(?:\/:[\w.]+,)|(?:=[\d\W\s]*\[[^]]+\])|(?:\?\w+:\w+)]]></rule>
+        <description>Detects common XSS concatenation patterns 2/2</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>
+    <filter>
+        <id>38</id>
+        <rule><![CDATA[(?:\<[\/]?(?:[i]?frame|applet|isindex|marquee|keygen|script|audio|video|input|button|textarea|style|base|body|meta|link|object|embed|param|plaintext|xm\w+|image|im(?:g|port)))]]></rule>
+        <description>Detects possibly malicious html elements including some attributes</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+        </tags>
+        <impact>4</impact>
+    </filter>   
+    <filter>
+        <id>39</id>
+        <rule><![CDATA[(?:\\x[01fe][\db-ce-f])|(?:%[01fe][\db-ce-f])|(?:&#[01fe][\db-ce-f])|(?:\\[01fe][\db-ce-f])|(?:&#x[01fe][\db-ce-f])]]></rule>
+        <description>Detects nullbytes and other dangerous characters</description>
+        <tags>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>xss</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>   
+    <filter>
+        <id>58</id>
+        <rule><![CDATA[(?:@[\w-]+\s*\()|(?:]\s*\(\s*["!]\s*\w)|(?:<[?%](?:php)?.*(?:[?%]>)?)|(?:;[\s\w|]*\$\w+\s*=)|(?:\$\w+\s*=(?:(?:\s*\$?\w+\s*[(;])|\s*".*"))|(?:;\s*\{\W*\w+\s*\()]]></rule>
+        <description>Detects code injection attempts 1/3</description>
+        <tags>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+        </tags>
+        <impact>7</impact>
+    </filter>   
+    <filter>
+        <id>59</id>
+        <rule><![CDATA[(?:(?:[;]+|(<[?%](?:php)?)).*(?:define|eval|file_get_contents|include|require|require_once|set|shell_exec|phpinfo|system|passthru|preg_\w+|execute)\s*["(@])]]></rule>
+        <description>Detects code injection attempts 2/3</description>
+        <tags>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+        </tags>
+        <impact>7</impact>
+    </filter>
+    <filter>
+        <id>60</id>
+        <rule><![CDATA[(?:(?:[;]+|(<[?%](?:php)?)).*[^\w](?:echo|print|print_r|var_dump|[fp]open))|(?:;\s*rm\s+-\w+\s+)|(?:;.*{.*\$\w+\s*=)|(?:\$\w+\s*\[\]\s*=\s*)]]></rule>
+        <description>Detects code injection attempts 3/3</description>
+        <tags>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+        </tags>
+        <impact>7</impact>
+    </filter>
+    <filter>
+        <id>62</id>
+        <rule><![CDATA[(?:function[^(]*\([^)]*\))|(?:(?:delete|void|throw|instanceof|new|typeof)[^\w.]+\w+\s*[([])|([)\]]\s*\.\s*\w+\s*=)|(?:\(\s*new\s+\w+\s*\)\.)]]></rule>
+        <description>Detects common function declarations and special JS operators</description>
+        <tags>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>  
+    <filter>
+        <id>64</id>
+        <rule><![CDATA[(?:\.pl\?\w+=\w?\|\w+;)|(?:\|\(\w+=\*)|(?:\*\s*\)+\s*;)]]></rule>
+        <description>Detects perl echo shellcode injection and LDAP vectors</description>
+        <tags>
+            <tag>lfi</tag>
+            <tag>rfe</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+    <filter>
+        <id>65</id>
+        <rule><![CDATA[(?:(^|\W)const\s+[\w\-]+\s*=)|(?:(?:do|for|while)\s*\([^;]+;+\))|(?:(?:^|\W)on\w+\s*=[\w\W]*(?:on\w+|alert|eval|print|confirm|prompt))|(?:groups=\d+\(\w+\))|(?:(.)\1{128,})]]></rule>
+        <description>Detects basic XSS DoS attempts</description>
+        <tags>
+            <tag>rfe</tag>
+            <tag>dos</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+    <filter>
+        <id>67</id>
+        <rule><![CDATA[(?:\({2,}\+{2,}:{2,})|(?:\({2,}\+{2,}:+)|(?:\({3,}\++:{2,})|(?:\$\[!!!\])]]></rule>
+        <description>Detects unknown attack vectors based on PHPIDS Centrifuge detection</description>
+        <tags>
+            <tag>xss</tag>
+            <tag>csrf</tag>
+            <tag>id</tag>
+            <tag>rfe</tag>
+            <tag>lfi</tag>
+        </tags>
+        <impact>7</impact>
+    </filter>
+</filters>

@@ -1,0 +1,11 @@
+<filters>
+	<filter>
+        <id>1</id>
+        <rule><![CDATA[.*(Action=MainMenu|Action=Show1File|Action=EditFile|Action=DbManager|Action=getTerminalInfo|Action=ServerInfo|Action=Servu|Action=kmuma|Action=kmuma&act=scan|Action=Cplgm&M=2|Action=plgm|Action=PageAddToMdb >|Action=ReadREG|Action=ScanPort|Action=Cmd1Shell|Action=UpFile|(pageName|id|list|action|act)=ServiceList|(pageName|id|list|action|act)=ServiceList|(pageName|id|list|action|act)=infoAboutSrv|(pageName|id|list|action|act)=objOnSrv|(pageName|id|list|action|act)=userList|(pageName|id|list|action|act)=WsCmdRun|(pageName|id|list|action|act)=SaCmdRun|(pageName|id|list|action|act)=SaCmdRun&theAct|(pageName|id|list|action|act)=FsoFileExplorer|(pageName|id|list|action|act)=FsoFileExplorer&theAct|(pageName|id|list|action|act)=FsoFileExplorer&thePath|pageName=MsDataBase|pageName=MsDataBase&theAct=showTables|pageName=TxtSearcher|pageName=OtherTools|act=scan|Action=mainwin|action=listtb|action=listvw|action=searchfile|action=xpcmdshell|(action|act)=cmdshell|action=mainmenu|action=showfile|action=editfile|action=course|action=serverinfo|action=upfile|action=dbmanager|ex=edit&pth=|PageName=PageUpload&theAct|PageName=PageWebProxy&url=|productName=HigroupASPAdmin|PageWebProxy|aCTiON=cMd|aCTiON=ClonETiMe&SrC=|aCTiON=SqLrOotKIt|aCTiON=Reg|aCTiON=DAtA|aCTiON=Goto&SrC=C:\|aCTiON=uPFIlE&SrC=|aCTiON=NEw&SrC=|act=info|act=filemanage|act=edit&src=|act=del&src=|act=rename&src=|DirName=|Type=.*FileName=.*\|Type=.*ok=dir|FsoFileExplorer|WsCmdRun|SaCmdRun|MsDataBase|HigroupASPAdmin|=cmd|ClonETiMe|SqLrOotKIt).*]]></rule>
+        <description></description>
+        <tags>
+            <tag>webshell</tag>
+        </tags>
+        <impact>5</impact>
+    </filter>
+</filters>
