@@ -148,7 +148,7 @@ with open(log_file_name, 'r') as rfd:
 				break
 
 	# list of unique IP addresses with country and number of hits
-	for ip in ip_info_dict:
+	for ip in tqdm(ip_info_dict):
 		writer2.writerow([ip]+ip_info_dict[ip])
 
 	csvfile1.close()
