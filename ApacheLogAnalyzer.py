@@ -4,8 +4,14 @@ from geolite2 import geolite2 # For getting country from IP address	/	pip instal
 import os # listdir, mkdir ...
 from xml.etree.ElementTree import parse # parsing xml for filter regex
 from tqdm import tqdm # progress bar
+import sys
 
-log_file_name = 'CTF2.log'
+num = len(sys.argv)
+if num!=2:
+	print('input logfile path as an argument')
+	exit()
+
+log_file_name = sys.argv[1]
 num_lines = sum(1 for line in open(log_file_name))
 
 # for saving IP info 
@@ -84,17 +90,17 @@ with open(log_file_name, 'r') as rfd:
 
 		#get Info
 		cs_uri_query = m.group('cs_uri_query')
+		cs_uri_stem = m.group('cs_uri_stem')
 		activity = list(m.groups())
 		ip = m.group('c_ip')
 		ip_info = ip_info_reader.get(ip)
 		
 		# activity write
-		"""
 		csvfile3 = open('activity/'+ip+'.csv', 'a', newline='')
 		writer3 = csv.writer(csvfile3)
 		writer3.writerow(activity)
 		csvfile3.close()
-		"""
+		
 
 		#add unique ID and ip's country, hits
 		if(not ip in ip_info_dict): 
@@ -136,10 +142,7 @@ with open(log_file_name, 'r') as rfd:
 		for element in webshell_filter :
 			rule = element.findtext("rule")
 			p = re.compile(rule)
-			m = p.match(cs_uri_query)
-			p = re.compile('.*[.](aspx|asp|cer|cdx|asa|php|php3|html|html|jsp|war)')
-			extension_match = p.match(activity[4])
-			#if m and extension_match and activity[-5]=='-':
+			m = p.match(cs_uri_stem+cs_uri_query)
 			if m :
 				description = element.findtext("description")
 				writer6.writerow(activity + [description])
@@ -154,3 +157,5 @@ with open(log_file_name, 'r') as rfd:
 	csvfile4.close()
 	csvfile5.close()
 	exceptWriter.close()
+
+    
