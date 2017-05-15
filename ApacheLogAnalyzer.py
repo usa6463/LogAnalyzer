@@ -18,6 +18,10 @@ num_lines = sum(1 for line in open(log_file_name))
 ip_info_reader = geolite2.reader()
 ip_info_dict = {}
 
+# for csvfile3 buffer
+csvfile3_dict = {}
+buffer_size = 20000
+
 with open(log_file_name, 'r') as rfd:
 
 	# files open
@@ -88,7 +92,7 @@ with open(log_file_name, 'r') as rfd:
 				multiLineCheck = False
 				line_buffer = ''
 
-		#get Info
+		#get fields
 		cs_uri_query = m.group('cs_uri_query')
 		cs_uri_stem = m.group('cs_uri_stem')
 		activity = list(m.groups())
@@ -96,10 +100,20 @@ with open(log_file_name, 'r') as rfd:
 		ip_info = ip_info_reader.get(ip)
 
 		# activity write
-		csvfile3 = open('activity/'+ip+'.csv', 'a', newline = '')
-		writer3 = csv.writer(csvfile3)
-		writer3.writerow(activity)
-		csvfile3.close()
+		if(not ip in csvfile3_dict):
+			csvfile3_dict[ip] = [activity]
+		else:
+			csvfile3_dict[ip].append(activity)
+		
+		if ((i%buffer_size) == 0 or i == (num_lines-1)):
+			keys = csvfile3_dict.keys()
+			for ip in keys:
+				csvfile3 = open('activity/'+ip+'.csv', 'a', newline = '')
+				writer3 = csv.writer(csvfile3)
+				while(len(csvfile3_dict[ip])):
+					writer3.writerow(csvfile3_dict[ip].pop(0))
+				csvfile3.close()
+			csvfile3_dict.clear()
 
 		#add unique ID and ip's country, hits
 		if(not ip in ip_info_dict):
