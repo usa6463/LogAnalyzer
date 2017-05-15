@@ -21,15 +21,15 @@ ip_info_dict = {}
 with open(log_file_name, 'r') as rfd:
 
 	# files open
-	csvfile1 = open('SimpleIPList.csv', 'w')
+	csvfile1 = open('SimpleIPList.csv', 'w', newline = '')
 	writer1 = csv.writer(csvfile1)
-	csvfile2 = open('DetailIPList.csv', 'w')
+	csvfile2 = open('DetailIPList.csv', 'w', newline = '')
 	writer2 = csv.writer(csvfile2)
-	csvfile4 = open('sqli_list.csv', 'w')
+	csvfile4 = open('sqli_list.csv', 'w', newline = '')
 	writer4 = csv.writer(csvfile4)
-	csvfile5 = open('rfi_list.csv', 'w')
+	csvfile5 = open('rfi_list.csv', 'w', newline = '')
 	writer5 = csv.writer(csvfile5)
-	csvfile6 = open('webshell_list.csv', 'w')
+	csvfile6 = open('webshell_list.csv', 'w', newline = '')
 	writer6 = csv.writer(csvfile6)
 	exceptWriter = open('exception.txt', 'a')
 
@@ -96,7 +96,7 @@ with open(log_file_name, 'r') as rfd:
 		ip_info = ip_info_reader.get(ip)
 
 		# activity write
-		csvfile3 = open('activity/'+ip+'.csv', 'a')
+		csvfile3 = open('activity/'+ip+'.csv', 'a', newline = '')
 		writer3 = csv.writer(csvfile3)
 		writer3.writerow(activity)
 		csvfile3.close()
@@ -149,7 +149,11 @@ with open(log_file_name, 'r') as rfd:
 
 	# list of unique IP addresses with country and number of hits
 	for ip in tqdm(ip_info_dict):
-		writer2.writerow([ip]+ip_info_dict[ip])
+		try:
+			writer2.writerow([ip]+ip_info_dict[ip])
+		except:
+			ip_info_dict[ip][0] = 'NO INFO'  # sometimes, there are country information strings which have not utf-8 character
+			writer2.writerow([ip]+ip_info_dict[ip])
 
 	csvfile1.close()
 	csvfile2.close()
