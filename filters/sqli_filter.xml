@@ -271,4 +271,85 @@
         </tags>
         <impact>3</impact>
     </filter>
+	<filter>
+        <id>83</id>
+        <rule><![CDATA[/\s/]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>84</id>
+        <rule><![CDATA[/[\'"]/]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>85</id>
+        <rule><![CDATA[/[\/\\\\]/]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>86</id>
+        <rule><![CDATA[/(and|or|null|not)/i]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>87</id>
+        <rule><![CDATA[/(union|select|from|where)/i]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>88</id>
+        <rule><![CDATA[/(group|order|having|limit)/i]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>89</id>
+        <rule><![CDATA[/(into|file|case)/i]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>90</id>
+        <rule><![CDATA[/(--|#|\/\*)/]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
+	<filter>
+        <id>91</id>
+        <rule><![CDATA[/(=|&|\|)/]]></rule>
+        <description>SQL Injection</description>
+        <tags>
+            <tag>sqli</tag>
+        </tags>
+        <impact>3</impact>
+    </filter>
 </filters>
